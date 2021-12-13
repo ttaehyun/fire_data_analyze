@@ -19,7 +19,7 @@ plt.show()
 #작동기기에 대한 발화요인대분류
 fire_reason = fire[["발화열원","발화요인대분류"]]
 fire_reason = fire_reason.loc[fire_reason["발화열원"]=="작동기기", ["발화열원","발화요인대분류"]]
-fire_reason.to_csv("fire//choice_reason.csv",index= False,encoding='utf-8-sig')
+fire_reason.to_csv("fire//elect_reason.csv",index= False,encoding='utf-8-sig')
 print(fire_reason["발화열원"].size)
 print(fire_reason)
 fire_reason = fire_reason["발화요인대분류"].value_counts()

@@ -1,36 +1,30 @@
+import pandas as pd
+
 from main import *
 
 #발화열원 많은 유형 추출
 
-origin = fire["발화열원"]
-origin_dict = dict()
-        #series에서 개수 세기 len(변수) or 변수.size or len(변수.index)
+# origin = fire[["발화열원","인명피해(명)소계"]]
+# print(origin["발화열원"].size)
+data_origin = fire["발화열원"].value_counts()
 
-for type in origin:
-    if (type in origin_dict):
-        origin_dict[type] += 1
-    else:
-        origin_dict[type] = 1
+dataframe = data_origin.to_frame(name='횟수')
+print(dataframe)
+dataframe = dataframe.reset_index()
+# print(dataframe)
+dataframe.plot(kind='barh',x='index', y = '횟수', color = 'red')
+plt.show()
 
-#발화열원별 발생빈도
-origin_per = dict()
-all_num = origin.size
-for type in origin_dict.keys():
-    origin_per[type] = round(origin_dict[type] / all_num *100, 2)
-
-# 발화열원별 개수 추출한 값 csv파일에 저장
-# 횟수 그래프
-origin_frame = pd.DataFrame(origin_dict,index= ['횟수'])
-origin_frame = origin_frame.transpose()
-origin_frame = origin_frame.reset_index()
-# origin_frame.to_csv("fire//origin_sum_num.csv",encoding='utf-8-sig')
-origin_frame.plot(kind='barh',x= 'index', y = '횟수', color = 'red')
-
-#빈도 그래프
-origin_per_fm = pd.DataFrame(origin_per, index=['발생빈도'])
-origin_per_fm = origin_per_fm.transpose()
-origin_per_fm.plot(kind='pie', y = '발생빈도')
-
-print(origin_frame)
-print(origin_per_fm)
+#발화열원별 발화요인대분류
+#작동기기에 대한 발화요인대분류
+fire_reason = fire[["발화열원","발화요인대분류"]]
+fire_reason = fire_reason.loc[fire_reason["발화열원"]=="작동기기", ["발화열원","발화요인대분류"]]
+fire_reason.to_csv("fire//choice_reason.csv",index= False,encoding='utf-8-sig')
+print(fire_reason["발화열원"].size)
+print(fire_reason)
+fire_reason = fire_reason["발화요인대분류"].value_counts()
+fire_reason_fm = fire_reason.to_frame(name= '횟수')
+print(fire_reason_fm)
+fire_reason_fm = fire_reason_fm.reset_index()
+fire_reason.plot(kind='barh',x= 'index',y='횟수',color= 'blue')
 plt.show()
